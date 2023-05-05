@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Island> islands;
     private RecyclerViewAdapter recyclerViewAdapter;
 
+    private Intent IslandActivityIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Testing RecyclerView
         islands = new ArrayList<>(Arrays.asList(
-                new Island("Tristan da Cuhna", 123,"United kingdom", "Atlantic Ocean", "","Edinburgh of the Seven Seas",120,""),
+                new Island("Tristan da Cunha", 238,"United kingdom", "Atlantic Ocean", "https://en.wikipedia.org/wiki/Tristan_da_Cunha","Edinburgh of the Seven Seas",120,""),
                 new Island("Easter Island", 7750,"Chile", "Pacific Ocean", "https://en.wikipedia.org/wiki/Easter_Island","",164,""), //163.6 area
                 new Island("Pitcairn Islands", 47,"United kingdom", "Pacific Ocean", "","Adamstown",47,""),
                 new Island("Bouvet Island", 0,"Norway", "Atlantic Ocean", "","",49,""),
@@ -35,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewAdapter = new RecyclerViewAdapter(this, islands, new RecyclerViewAdapter.OnClickListener() {
             @Override
             public void onClick(Island island) {
-                Log.d("Island:", island.getName());
+                Log.d("Island:", island.getWikiUrl());
+                IslandActivityIntent = new Intent(MainActivity.this,IslandActivity.class);
+                startActivity(IslandActivityIntent);
             }
         });
 

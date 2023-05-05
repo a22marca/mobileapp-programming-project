@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    tools:context=".IslandActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.Project"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.MaterialComponents" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/name_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:padding="30dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/island_info_card"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/island_info_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        card_view:cardCornerRadius="15dp"
+        app:layout_constraintTop_toBottomOf="@id/name_textview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/ocean_label_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:text="Location:"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ocean_textview"
+                app:layout_constraintBottom_toTopOf="@id/population_label_textview"/>
+
+            <TextView
+                android:id="@+id/ocean_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:text="TextView"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ocean_label_textview"
+                app:layout_constraintBottom_toTopOf="@id/population_textview"/>
+
+            <TextView
+                android:id="@+id/population_label_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Population:"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/ocean_label_textview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/population_textview"
+                app:layout_constraintBottom_toTopOf="@id/area_label_textview"/>
+
+            <TextView
+                android:id="@+id/population_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="22sp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/ocean_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/population_label_textview"
+                app:layout_constraintBottom_toTopOf="@id/area_textview"/>
+
+            <TextView
+                android:id="@+id/area_label_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Area:"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/population_label_textview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/area_textview"
+                app:layout_constraintBottom_toTopOf="@id/government_label_textview"/>
+
+            <TextView
+                android:id="@+id/area_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="22sp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/population_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/area_label_textview"
+                app:layout_constraintBottom_toTopOf="@id/government_textview"/>
+
+            <TextView
+                android:id="@+id/government_label_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Government:"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/ocean_label_textview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/government_textview"
+                app:layout_constraintBottom_toTopOf="@id/wikiurl_label_textview"/>
+
+            <TextView
+                android:id="@+id/government_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="22sp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/area_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/government_label_textview"
+                app:layout_constraintBottom_toTopOf="@id/wikiurl_textview" />
+
+
+            <TextView
+                android:id="@+id/wikiurl_label_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wikipedia:"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                app:layout_constraintTop_toBottomOf="@id/government_label_textview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/wikiurl_textview"
+                />
+
+            <TextView
+                android:id="@+id/wikiurl_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="LINK"
+                android:textSize="22sp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/government_textview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/wikiurl_label_textview"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
