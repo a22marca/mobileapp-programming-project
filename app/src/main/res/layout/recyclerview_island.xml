@@ -10,93 +10,115 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        card_view:cardCornerRadius="15dp"
         android:layout_weight="1"
-        app:cardBackgroundColor="@color/card_background">
+        app:cardBackgroundColor="@color/card_background"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="1dp">
 
             <TextView
-                android:id="@+id/island_name"
+                android:id="@+id/island_name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Island"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@id/government_text"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/government_label_textview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="24sp"/>
 
             <TextView
-                android:id="@+id/government_text"
+                android:id="@+id/government_label_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Government: "
                 android:textStyle="bold"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@id/ocean_location_text"
-                app:layout_constraintEnd_toStartOf="@id/government_name_placeholder"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/ocean_location_label_textview"
+                app:layout_constraintEnd_toStartOf="@id/government_name_textview"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/island_name" />
+                app:layout_constraintTop_toBottomOf="@id/island_name_textview"
+                android:layout_marginStart="10dp"
+                android:padding="2dp" />
 
             <TextView
-                android:id="@+id/government_name_placeholder"
+                android:id="@+id/government_name_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="government"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@id/ocean_location_placeholder"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/ocean_location_textview"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/government_text"
-                app:layout_constraintTop_toBottomOf="@id/island_name" />
+                app:layout_constraintStart_toEndOf="@id/government_label_textview"
+                app:layout_constraintTop_toBottomOf="@id/island_name_textview"
+                android:layout_marginStart="10dp"
+                android:padding="2dp" />
 
             <TextView
-                android:id="@+id/ocean_location_text"
+                android:id="@+id/ocean_location_label_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ocean: "
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/population_text"
-                app:layout_constraintEnd_toStartOf="@id/ocean_location_placeholder"
+                app:layout_constraintBottom_toBottomOf="@id/population_label_textview"
+                app:layout_constraintEnd_toStartOf="@id/ocean_location_textview"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/government_text" />
+                app:layout_constraintTop_toBottomOf="@id/government_label_textview"
+                android:layout_marginStart="10dp"
+                android:padding="2dp" />
 
             <TextView
-                android:id="@+id/ocean_location_placeholder"
+                android:id="@+id/ocean_location_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="ocean"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/population_placeholder"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/population_textview"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ocean_location_text"
-                app:layout_constraintTop_toBottomOf="@id/government_name_placeholder" />
+                app:layout_constraintStart_toEndOf="@id/ocean_location_label_textview"
+                app:layout_constraintTop_toBottomOf="@id/government_name_textview"
+                android:layout_marginStart="10dp"
+                android:padding="2dp" />
 
             <TextView
-                android:id="@+id/population_text"
+                android:id="@+id/population_label_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Population: "
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/population_placeholder"
+                app:layout_constraintEnd_toStartOf="@id/population_textview"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ocean_location_text" />
+                app:layout_constraintTop_toBottomOf="@id/ocean_location_label_textview"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"/>
 
             <TextView
-                android:id="@+id/population_placeholder"
+                android:id="@+id/population_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="123"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/population_text"
-                app:layout_constraintTop_toBottomOf="@id/ocean_location_placeholder" />
+                app:layout_constraintStart_toEndOf="@id/population_label_textview"
+                app:layout_constraintTop_toBottomOf="@id/ocean_location_textview"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
