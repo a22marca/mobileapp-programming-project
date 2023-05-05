@@ -50,7 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             itemView.setOnClickListener(this);
             name = itemView.findViewById(R.id.island_name_textview);
-            government = itemView.findViewById(R.id.government_name_placeholder);
+            government = itemView.findViewById(R.id.government_name_textview);
             ocean = itemView.findViewById(R.id.ocean_location_textview);
             population = itemView.findViewById(R.id.population_textview);
         }
