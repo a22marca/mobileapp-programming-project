@@ -40,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(Island island) {
                 Log.d("Island:", island.getWikiUrl());
                 IslandActivityIntent = new Intent(MainActivity.this,IslandActivity.class);
+                IslandActivityIntent.putExtra("Island_name",island.getName());
+                IslandActivityIntent.putExtra("Island_population",String.valueOf(island.getPopulation()));
+                IslandActivityIntent.putExtra("Island_government",island.getGovernment());
+                IslandActivityIntent.putExtra("Island_ocean",island.getOcean());
+                IslandActivityIntent.putExtra("Island_wikiUrl",island.getWikiUrl());
+                IslandActivityIntent.putExtra("Island_area",String.valueOf(island.getArea()));
+                IslandActivityIntent.putExtra("Island_imageUrl",island.getImageUrl());
                 startActivity(IslandActivityIntent);
             }
         });
