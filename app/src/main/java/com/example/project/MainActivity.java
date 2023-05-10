@@ -11,16 +11,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
 
     private ArrayList<Island> islands;
     private RecyclerViewAdapter recyclerViewAdapter;
 
     private Intent islandActivityIntent;
     private Intent aboutActivityIntent;
+
+    private final String ISLANDS_JSON_URL = "https://mobprog.webug.se/json-api?login=a22marca";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        new JsonTask(this).execute(ISLANDS_JSON_URL);
+
         Button aboutButton = findViewById(R.id.about_button);
+
+        islands = new ArrayList<>();
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,15 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(aboutActivityIntent);
             }
         });
-
-        // Testing RecyclerView
-        islands = new ArrayList<>(Arrays.asList(
-                new Island("Tristan da Cunha", 238,"United kingdom", "Atlantic Ocean", "https://en.wikipedia.org/wiki/Tristan_da_Cunha","Edinburgh of the Seven Seas",120,""),
-                new Island("Easter Island", 7750,"Chile", "Pacific Ocean", "https://en.wikipedia.org/wiki/Easter_Island","",164,""), //163.6 area
-                new Island("Pitcairn Islands", 47,"United kingdom", "Pacific Ocean", "","Adamstown",47,""),
-                new Island("Bouvet Island", 0,"Norway", "Atlantic Ocean", "","",49,""),
-                new Island("Kerguelen Islands", 45,"France", "Atlantic Ocean", "","Port-aux-Français",7125,"")
-        ));
 
         recyclerViewAdapter = new RecyclerViewAdapter(this, islands, new RecyclerViewAdapter.OnClickListener() {
             @Override
@@ -66,5 +67,33 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView view = findViewById(R.id.recyclerview_islands);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(recyclerViewAdapter);
+    }
+
+    @Override
+    public void onPostExecute(String json){
+        try {
+            JSONArray jsonIslandsArray = new JSONArray(json);
+
+            for (int i = 0; i < jsonIslandsArray.length(); i++){
+                JSONObject islandObject = jsonIslandsArray.getJSONObject(i);
+                JSONObject islandAuxDataObject = islandObject.getJSONObject("auxdata");
+
+                islands.add(new Island(
+                        islandObject.getString("name"),
+                        islandObject.getInt("cost"),
+                        islandObject.getString("company"),
+                        islandObject.getString("location"),
+                        islandAuxDataObject.getString("wikiUrl"),
+                        islandObject.getString("category"),
+                        islandObject.getInt("size"),
+                        islandAuxDataObject.getString("imageUrl")
+                ));
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        recyclerViewAdapter.notifyDataSetChanged();
+
     }
 }
