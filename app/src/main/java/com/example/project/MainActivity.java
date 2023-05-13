@@ -9,7 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,8 +20,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
-public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
+public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener, AdapterView.OnItemSelectedListener {
 
     private ArrayList<Island> islands;
     private RecyclerViewAdapter recyclerViewAdapter;
@@ -27,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     private Intent aboutActivityIntent;
 
     private final String ISLANDS_JSON_URL = "https://mobprog.webug.se/json-api?login=a22marca";
-
+    private Spinner filterSpinner;
+    private String savedJson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +40,15 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Button aboutButton = findViewById(R.id.about_button);
+        filterSpinner = findViewById(R.id.filter_spinner);
+        filterSpinner.setOnItemSelectedListener(this);
+
+        savedJson = "";
+        islands = new ArrayList<>();
+
         new JsonTask(this).execute(ISLANDS_JSON_URL);
 
-        Button aboutButton = findViewById(R.id.about_button);
-
-        islands = new ArrayList<>();
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,8 +78,10 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         view.setAdapter(recyclerViewAdapter);
     }
 
+    // Manage downloaded JSON
     @Override
     public void onPostExecute(String json){
+        savedJson = json;
         try {
             JSONArray jsonIslandsArray = new JSONArray(json);
 
@@ -96,4 +107,35 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         recyclerViewAdapter.notifyDataSetChanged();
 
     }
+
+    // Item selected in spinner
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+        islands.removeAll(islands);
+        onPostExecute(savedJson);
+
+        String remove = "";
+        if (pos==2){
+            remove = "Pacific Ocean";
+        }else if (pos==1){
+            remove = "Atlantic Ocean";
+        }
+
+        if (pos>0){
+            for (int i = 0; i < islands.size();i++){
+                Log.d("islandname",islands.get(i).getName());
+                if (!islands.get(i).getOcean().equals(remove)){
+                    islands.remove(i);
+                }
+            }
+            recyclerViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    //spinner implemented method
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
 }
