@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">project</string>
+    <string name="app_name">Remote Islands</string>
     <string-array name="filters">
-        <item>Filter</item>
+        <item>None</item>
+        <item>Islands in the Atlantic</item>
+        <item>Islands in the Pacific</item>
     </string-array>
 </resources>
