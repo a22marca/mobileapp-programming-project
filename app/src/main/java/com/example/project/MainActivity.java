@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private final String ISLANDS_JSON_URL = "https://mobprog.webug.se/json-api?login=a22marca";
     private Spinner filterSpinner;
+    private int selectedFilter;
     private String savedJson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         filterSpinner.setOnItemSelectedListener(this);
 
         savedJson = "";
+        selectedFilter = 0;
         islands = new ArrayList<>();
 
         new JsonTask(this).execute(ISLANDS_JSON_URL);
@@ -111,24 +113,27 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     // Item selected in spinner
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-        islands.removeAll(islands);
-        onPostExecute(savedJson);
 
-        String remove = "";
-        if (pos==2){
-            remove = "Pacific Ocean";
-        }else if (pos==1){
-            remove = "Atlantic Ocean";
-        }
+        if (selectedFilter!=pos){ // if user changed selected another filter
+            selectedFilter=pos;
+            islands.removeAll(islands);
+            onPostExecute(savedJson);
 
-        if (pos>0){
-            for (int i = 0; i < islands.size();i++){
-                Log.d("islandname",islands.get(i).getName());
-                if (!islands.get(i).getOcean().equals(remove)){
-                    islands.remove(i);
+            if (pos>0){
+                String remove = "";
+                if (pos==2){
+                    remove = "Pacific Ocean";
+                }else if (pos==1){
+                    remove = "Atlantic Ocean";
                 }
+                for (int i = 0; i < islands.size();i++){
+                    Log.d("islandname",islands.get(i).getName());
+                    if (!islands.get(i).getOcean().equals(remove)){
+                        islands.remove(i);
+                    }
+                }
+                recyclerViewAdapter.notifyDataSetChanged();
             }
-            recyclerViewAdapter.notifyDataSetChanged();
         }
     }
 
