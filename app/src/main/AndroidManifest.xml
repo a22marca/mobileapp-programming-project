@@ -22,7 +22,8 @@
         <activity
             android:name=".IslandActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
