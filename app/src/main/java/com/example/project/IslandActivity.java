@@ -26,8 +26,8 @@ public class IslandActivity extends AppCompatActivity {
         TextView populationTextView = findViewById(R.id.population_textview);
         TextView governmentTextView = findViewById(R.id.government_textview);
         TextView areaTextView = findViewById(R.id.area_textview);
-        TextView wikiUrlTextView = findViewById(R.id.wikiurl_textview);
-        TextView locationTextView = findViewById(R.id.ocean_textview);
+        TextView capitalTextView = findViewById(R.id.capital_textview);
+        TextView locationTextView = findViewById(R.id.location_textview);
 
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
@@ -36,6 +36,7 @@ public class IslandActivity extends AppCompatActivity {
             governmentTextView.setText(intentExtras.getString("Island_government"));
             areaTextView.setText(intentExtras.getString("Island_area") + " km\u00B2");
             locationTextView.setText(intentExtras.getString("Island_ocean"));
+            capitalTextView.setText(intentExtras.getString("Island_capital"));
             wikiUrl = intentExtras.getString("Island_wikiUrl");
         }
 
