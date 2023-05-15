@@ -12,6 +12,10 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
         <activity
+            android:name=".WikiActivity"
+            android:exported="false"
+            android:parentActivityName=".IslandActivity"/>
+        <activity
             android:name=".AboutActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
