@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private final String ISLANDS_JSON_URL = "https://mobprog.webug.se/json-api?login=a22marca";
     private Spinner filterSpinner;
-    private int selectedFilter;
     private String savedJson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +45,24 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         filterSpinner.setOnItemSelectedListener(this);
 
         savedJson = "";
-        selectedFilter = 0;
         islands = new ArrayList<>();
+
+        recyclerViewAdapter = new RecyclerViewAdapter(this, islands, new RecyclerViewAdapter.OnClickListener() {
+            @Override
+            public void onClick(Island island) {
+                Log.d("Island:", island.getWikiUrl());
+                islandActivityIntent = new Intent(MainActivity.this,IslandActivity.class);
+                islandActivityIntent.putExtra("Island_name",island.getName());
+                islandActivityIntent.putExtra("Island_population",String.valueOf(island.getPopulation()));
+                islandActivityIntent.putExtra("Island_government",island.getGovernment());
+                islandActivityIntent.putExtra("Island_ocean",island.getOcean());
+                islandActivityIntent.putExtra("Island_capital", island.getCapital());
+                islandActivityIntent.putExtra("Island_wikiUrl",island.getWikiUrl());
+                islandActivityIntent.putExtra("Island_area",String.valueOf(island.getArea()));
+                islandActivityIntent.putExtra("Island_imageUrl",island.getImageUrl());
+                startActivity(islandActivityIntent);
+            }
+        });
 
         new JsonTask(this).execute(ISLANDS_JSON_URL);
 
@@ -59,53 +74,50 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             }
         });
 
-        recyclerViewAdapter = new RecyclerViewAdapter(this, islands, new RecyclerViewAdapter.OnClickListener() {
-            @Override
-            public void onClick(Island island) {
-                Log.d("Island:", island.getWikiUrl());
-                islandActivityIntent = new Intent(MainActivity.this,IslandActivity.class);
-                islandActivityIntent.putExtra("Island_name",island.getName());
-                islandActivityIntent.putExtra("Island_population",String.valueOf(island.getPopulation()));
-                islandActivityIntent.putExtra("Island_government",island.getGovernment());
-                islandActivityIntent.putExtra("Island_ocean",island.getOcean());
-                islandActivityIntent.putExtra("Island_wikiUrl",island.getWikiUrl());
-                islandActivityIntent.putExtra("Island_area",String.valueOf(island.getArea()));
-                islandActivityIntent.putExtra("Island_imageUrl",island.getImageUrl());
-                startActivity(islandActivityIntent);
-            }
-        });
-
         RecyclerView view = findViewById(R.id.recyclerview_islands);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(recyclerViewAdapter);
     }
 
-    // Manage downloaded JSON
+    // downloaded JSON
     @Override
     public void onPostExecute(String json){
-        savedJson = json;
+        savedJson = json; // only download the json one time
+    }
+
+    private void getIslandsFromJson(String filter) {
         try {
-            JSONArray jsonIslandsArray = new JSONArray(json);
+            JSONArray jsonIslandsArray = new JSONArray(savedJson);
 
             for (int i = 0; i < jsonIslandsArray.length(); i++){
                 JSONObject islandObject = jsonIslandsArray.getJSONObject(i);
                 JSONObject islandAuxDataObject = islandObject.getJSONObject("auxdata");
+                String name = islandObject.getString("name");
+                int population = islandObject.getInt("cost");
+                String government = islandObject.getString("company");
+                String location = islandObject.getString("location");
+                String wikiUrl = islandAuxDataObject.getString("wikiUrl");
+                String capital = islandObject.getString("category");
+                int area = islandObject.getInt("size");
+                String imageUrl = islandAuxDataObject.getString("imageUrl");
 
-                islands.add(new Island(
-                        islandObject.getString("name"),
-                        islandObject.getInt("cost"),
-                        islandObject.getString("company"),
-                        islandObject.getString("location"),
-                        islandAuxDataObject.getString("wikiUrl"),
-                        islandObject.getString("category"),
-                        islandObject.getInt("size"),
-                        islandAuxDataObject.getString("imageUrl")
-                ));
+                // filter out islands that should not be added
+                if (!location.equals(filter)){
+                    islands.add(new Island(
+                            name,
+                            population,
+                            government,
+                            location,
+                            wikiUrl,
+                            capital,
+                            area,
+                            imageUrl
+                    ));
+                }
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
         recyclerViewAdapter.notifyDataSetChanged();
 
     }
@@ -113,29 +125,16 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     // Item selected in spinner
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-
-        if (selectedFilter!=pos){ // if user changed selected another filter
-            selectedFilter=pos;
-            islands.removeAll(islands);
-            onPostExecute(savedJson);
-
-            if (pos>0){
-                String remove = "";
-                if (pos==2){
-                    remove = "Pacific Ocean";
-                }else if (pos==1){
-                    remove = "Atlantic Ocean";
-                }
-                for (int i = 0; i < islands.size();i++){
-                    Log.d("islandname",islands.get(i).getName());
-                    if (!islands.get(i).getOcean().equals(remove)){
-                        islands.remove(i);
-                    }
-                }
-                recyclerViewAdapter.notifyDataSetChanged();
-            }
+        islands.removeAll(islands);
+        String filter = ""; // Condition for what islands should not be listed
+        if (pos==1){
+            filter = "Pacific Ocean";
+        }else if (pos==2){
+            filter = "Atlantic Ocean";
         }
+        getIslandsFromJson(filter);
     }
+
 
     //spinner implemented method
     @Override
