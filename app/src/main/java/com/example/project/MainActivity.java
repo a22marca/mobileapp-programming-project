@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,13 +27,14 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private ArrayList<Island> islands;
     private RecyclerViewAdapter recyclerViewAdapter;
-
     private Intent islandActivityIntent;
     private Intent aboutActivityIntent;
-
     private final String ISLANDS_JSON_URL = "https://mobprog.webug.se/json-api?login=a22marca";
     private Spinner filterSpinner;
     private String savedJson;
+    private SharedPreferences filterPreferenceRef;
+    private SharedPreferences.Editor filterPreferenceEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +42,22 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // find Views
         Button aboutButton = findViewById(R.id.about_button);
         filterSpinner = findViewById(R.id.filter_spinner);
         filterSpinner.setOnItemSelectedListener(this);
 
-        savedJson = "";
+        filterPreferenceRef = getPreferences(MODE_PRIVATE);
+        filterPreferenceRef  = getSharedPreferences("filterPreference", MODE_PRIVATE);
+        filterPreferenceRef = getSharedPreferences("selectedFilter", MODE_PRIVATE);
+        filterPreferenceEditor = filterPreferenceRef.edit();
+
+        //list for RecycleView
         islands = new ArrayList<>();
 
         recyclerViewAdapter = new RecyclerViewAdapter(this, islands, new RecyclerViewAdapter.OnClickListener() {
             @Override
-            public void onClick(Island island) {
-                Log.d("Island:", island.getWikiUrl());
+            public void onClick(Island island) { //item clicked in RecycleView
                 islandActivityIntent = new Intent(MainActivity.this,IslandActivity.class);
                 islandActivityIntent.putExtra("Island_name",island.getName());
                 islandActivityIntent.putExtra("Island_population",String.valueOf(island.getPopulation()));
@@ -64,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             }
         });
 
-        new JsonTask(this).execute(ISLANDS_JSON_URL);
+        savedJson = "";
+        new JsonTask(this).execute(ISLANDS_JSON_URL); // download json
 
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,10 +90,11 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     // downloaded JSON
     @Override
     public void onPostExecute(String json){
-        savedJson = json; // only download the json one time
+        savedJson = json; //save downloaded json
     }
 
-    private void getIslandsFromJson(String filter) {
+    //get Island information from Json
+    private void getIslandsFromJson() {
         try {
             JSONArray jsonIslandsArray = new JSONArray(savedJson);
 
@@ -101,7 +110,9 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
                 int area = islandObject.getInt("size");
                 String imageUrl = islandAuxDataObject.getString("imageUrl");
 
-                // filter out islands that should not be added
+                //get selected filter
+                String filter = filterPreferenceRef.getString("filterPreference","");
+                // filter islands that should not be added
                 if (!location.equals(filter)){
                     islands.add(new Island(
                             name,
@@ -125,14 +136,18 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     // Item selected in spinner
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-        islands.removeAll(islands);
-        String filter = ""; // Condition for what islands should not be listed
+        islands.removeAll(islands); //clear arraylist
+        //selected filter selection
         if (pos==1){
-            filter = "Pacific Ocean";
+            filterPreferenceEditor.putString("filterPreference","Pacific Ocean");
         }else if (pos==2){
-            filter = "Atlantic Ocean";
+            filterPreferenceEditor.putString("filterPreference","Atlantic Ocean");
+        }else {
+            filterPreferenceEditor.putString("filterPreference","");
         }
-        getIslandsFromJson(filter);
+        filterPreferenceEditor.putInt("selectedFilter",pos); // save spinner position for onResume
+        filterPreferenceEditor.apply();
+        getIslandsFromJson(); //get island information from json
     }
 
 
@@ -140,6 +155,12 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void onResume(){
+        super.onResume();
+        //set saved spinner index if it exists, otherwise index 0
+        filterSpinner.setSelection(filterPreferenceRef.getInt("selectedFilter",0));
     }
 
 }
