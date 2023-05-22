@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         filterSpinner = findViewById(R.id.filter_spinner);
         filterSpinner.setOnItemSelectedListener(this);
 
+        //SharedPreferences
         filterPreferenceRef = getPreferences(MODE_PRIVATE);
         filterPreferenceRef  = getSharedPreferences("filterPreference", MODE_PRIVATE);
         filterPreferenceRef = getSharedPreferences("selectedFilter", MODE_PRIVATE);
@@ -71,9 +72,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             }
         });
 
-        savedJson = "";
-        new JsonTask(this).execute(ISLANDS_JSON_URL); // download json
 
+        // button to start AboutActivity
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,13 +90,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     // downloaded JSON
     @Override
     public void onPostExecute(String json){
-        savedJson = json; //save downloaded json
-    }
-
-    //get Island information from Json
-    private void getIslandsFromJson() {
         try {
-            JSONArray jsonIslandsArray = new JSONArray(savedJson);
+            JSONArray jsonIslandsArray = new JSONArray(json);
 
             for (int i = 0; i < jsonIslandsArray.length(); i++){
                 JSONObject islandObject = jsonIslandsArray.getJSONObject(i);
@@ -130,14 +125,14 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             throw new RuntimeException(e);
         }
         recyclerViewAdapter.notifyDataSetChanged();
-
     }
+
 
     // Item selected in spinner
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-        islands.removeAll(islands); //clear arraylist
-        //selected filter selection
+        islands.removeAll(islands); //remove islands
+        //set selected filter in SharedPreferences
         if (pos==1){
             filterPreferenceEditor.putString("filterPreference","Pacific Ocean");
         }else if (pos==2){
@@ -147,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         }
         filterPreferenceEditor.putInt("selectedFilter",pos); // save spinner position for onResume
         filterPreferenceEditor.apply();
-        getIslandsFromJson(); //get island information from json
+        // get JSON
+        new JsonTask(this).execute(ISLANDS_JSON_URL);
     }
 
 
@@ -159,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     public void onResume(){
         super.onResume();
-        //set saved spinner index if it exists, otherwise index 0
+        //set selected filter if it exists, otherwise index 0
         filterSpinner.setSelection(filterPreferenceRef.getInt("selectedFilter",0));
     }
 
