@@ -47,6 +47,15 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         filterSpinner = findViewById(R.id.filter_spinner);
         filterSpinner.setOnItemSelectedListener(this);
 
+        // button to start AboutActivity
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                aboutActivityIntent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(aboutActivityIntent);
+            }
+        });
+
         //SharedPreferences
         filterPreferenceRef = getPreferences(MODE_PRIVATE);
         filterPreferenceRef  = getSharedPreferences("filterPreference", MODE_PRIVATE);
@@ -72,15 +81,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             }
         });
 
-
-        // button to start AboutActivity
-        aboutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                aboutActivityIntent = new Intent(MainActivity.this, AboutActivity.class);
-                startActivity(aboutActivityIntent);
-            }
-        });
 
         RecyclerView view = findViewById(R.id.recyclerview_islands);
         view.setLayoutManager(new LinearLayoutManager(this));
