@@ -5,4 +5,8 @@
         <item>Islands in the Atlantic</item>
         <item>Islands in the Pacific</item>
     </string-array>
+    <string name="about_text">
+        This app is made for users who might be interested in geography or countries, and wants to learn more about unusual and interesting places on earth. \n\n
+        Some english knowledge is required by the user since the information provided and the external wikipedia pages are written in english.
+    </string>
 </resources>
