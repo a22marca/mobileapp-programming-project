@@ -6,7 +6,9 @@
         <item>Islands in the Pacific</item>
     </string-array>
     <string name="about_text">
-        This app is made for users who might be interested in geography or countries, and wants to learn more about unusual and interesting places on earth. \n\n
-        Some english knowledge is required by the user since the information provided and the external wikipedia pages are written in english.
+        This app is made for users who might be interested in geography or countries, and wants to learn more about unusual and interesting places on earth.
+        The user is someone in any age from youth to adult and does not need to have any prior knowledge in this subject to understand the contents of the application.
+        \n\nThe app provides information about remote islands and also where the user can read more about them.
+        Some english understanding is required by the user since the information provided and the external wikipedia pages are written in english.
     </string>
 </resources>
