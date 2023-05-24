@@ -20,12 +20,14 @@ public class WikiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wiki);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // back arrow
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //find WebView and set settings
         wikiWebView = findViewById(R.id.wikipedia_webview);
-        wikiWebView.setWebViewClient(new WebViewClient()); // Do not open in Chrome!
+        wikiWebView.setWebViewClient(new WebViewClient());
         wikiWebView.getSettings().setJavaScriptEnabled(true);
 
+        // URL from Intents
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
             wikiUrl = intentExtras.getString("wikiUrl");

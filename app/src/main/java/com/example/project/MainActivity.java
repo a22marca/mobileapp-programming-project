@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     private Intent aboutActivityIntent;
     private final String ISLANDS_JSON_URL = "https://mobprog.webug.se/json-api?login=a22marca";
     private Spinner filterSpinner;
-    private String savedJson;
     private SharedPreferences filterPreferenceRef;
     private SharedPreferences.Editor filterPreferenceEditor;
 
@@ -65,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         //list for RecycleView
         islands = new ArrayList<>();
 
+        //Start IslandActivity with Intents
         recyclerViewAdapter = new RecyclerViewAdapter(this, islands, new RecyclerViewAdapter.OnClickListener() {
             @Override
             public void onClick(Island island) { //item clicked in RecycleView
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
             }
         });
 
-
         RecyclerView view = findViewById(R.id.recyclerview_islands);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(recyclerViewAdapter);
@@ -91,10 +90,13 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     @Override
     public void onPostExecute(String json){
         try {
+            // json data to a json array
             JSONArray jsonIslandsArray = new JSONArray(json);
 
             for (int i = 0; i < jsonIslandsArray.length(); i++){
+                // get object from Json data
                 JSONObject islandObject = jsonIslandsArray.getJSONObject(i);
+                // get values from json object
                 JSONObject islandAuxDataObject = islandObject.getJSONObject("auxdata");
                 String name = islandObject.getString("name");
                 int population = islandObject.getInt("cost");
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+        //update RecyclerView contents
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
